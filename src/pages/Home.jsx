@@ -26,7 +26,7 @@ export default function Home() {
             <div className="absolute h-[440px] w-[440px] rounded-full border border-ink/15 sm:h-[520px] sm:w-[520px]" />
             <div className="absolute h-[310px] w-[310px] rounded-full border border-ink/15 sm:h-[390px] sm:w-[390px]" />
             <div className="absolute h-[210px] w-[210px] rounded-full bg-white/25 sm:h-[290px] sm:w-[290px]" />
-            <img src="/images/pulso-urbano.svg" alt="" className="hero-shirt relative z-10 h-[370px] w-[370px] max-w-none object-contain drop-shadow-[0_24px_20px_rgba(35,43,35,0.20)] sm:h-[490px] sm:w-[490px] md:h-[min(48vw,570px)] md:w-[min(48vw,570px)]" />
+            <img src={products[0].image} alt="" className="hero-shirt relative z-10 h-[370px] w-[370px] max-w-none object-contain drop-shadow-[0_24px_20px_rgba(35,43,35,0.20)] sm:h-[490px] sm:w-[490px] md:h-[min(48vw,570px)] md:w-[min(48vw,570px)]" />
             <div className="absolute right-[7%] top-[12%] z-10 flex h-[94px] w-[94px] -rotate-12 flex-col items-center justify-center rounded-full bg-ink text-center text-[11px] font-bold uppercase leading-tight tracking-wider text-white sm:right-[10%] sm:top-[15%] sm:h-[120px] sm:w-[120px] sm:text-xs">Hecho para<br /><span className="text-lime">ser tú ✳</span></div>
             <span className="absolute bottom-[12%] left-[7%] z-10 rounded-full bg-white px-4 py-2.5 text-xs font-bold text-ink shadow-sm sm:left-[12%] sm:text-sm">✦ Tu próximo favorito</span>
           </div>

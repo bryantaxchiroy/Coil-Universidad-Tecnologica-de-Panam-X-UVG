@@ -1,3 +1,6 @@
+// The same URLs work at localhost / and under the GitHub Pages repository path.
+const imageBase = import.meta.env?.BASE_URL || '/'
+
 export const products = [
   {
     id: 'pulso-urbano',
@@ -6,7 +9,7 @@ export const products = [
     category: 'Gráficas',
     colors: ['Negro', 'Blanco', 'Verde oliva'],
     sizes: ['S', 'M', 'L', 'XL'],
-    image: '/images/pulso-urbano.svg',
+    image: `${imageBase}images/pulso-urbano.svg`,
     imageAlt: 'Camiseta negra Pulso urbano con diseño gráfico verde lima',
     background: 'bg-[#e6e9dc]',
     badge: 'Favorita',
@@ -18,7 +21,7 @@ export const products = [
     category: 'Minimalistas',
     colors: ['Crema', 'Negro', 'Azul marino'],
     sizes: ['S', 'M', 'L', 'XL'],
-    image: '/images/linea-libre.svg',
+    image: `${imageBase}images/linea-libre.svg`,
     imageAlt: 'Camiseta crema Línea libre con dibujo lineal azul',
     background: 'bg-[#eee8df]',
     badge: 'Nueva',
@@ -30,7 +33,7 @@ export const products = [
     category: 'Tipográficas',
     colors: ['Azul marino', 'Blanco', 'Gris'],
     sizes: ['S', 'M', 'L', 'XL'],
-    image: '/images/fuera-de-serie.svg',
+    image: `${imageBase}images/fuera-de-serie.svg`,
     imageAlt: 'Camiseta azul marino Fuera de serie con diseño tipográfico',
     background: 'bg-[#e3e8eb]',
   },
@@ -41,7 +44,7 @@ export const products = [
     category: 'Gráficas',
     colors: ['Terracota', 'Crema', 'Negro'],
     sizes: ['S', 'M', 'L', 'XL'],
-    image: '/images/modo-creativo.svg',
+    image: `${imageBase}images/modo-creativo.svg`,
     imageAlt: 'Camiseta terracota Modo creativo con diseño abstracto',
     background: 'bg-[#efe4db]',
   },
