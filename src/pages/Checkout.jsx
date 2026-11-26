@@ -32,7 +32,7 @@ export default function Checkout() {
     if (Object.keys(fieldErrors).length) return
     setSubmitting(true)
     try {
-      const { order, warning } = createOrder({ customer, delivery })
+      const { order, warning } = createOrder({ customer, delivery }, window.localStorage, { expectedItems: cart.items })
       navigate(`/pedido/${encodeURIComponent(order.id)}`, { replace: true, state: { warning } })
     } catch (error) {
       setSubmitError(error.message)

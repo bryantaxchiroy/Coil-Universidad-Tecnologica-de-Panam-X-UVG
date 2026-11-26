@@ -1,4 +1,5 @@
 import { DESIGN_HEIGHT, DESIGN_WIDTH, PRINT_ZONE, isOutsidePrint, shirtColors } from '../data/customization.js'
+import { photoPreviewFor } from '../data/photoPreview.js'
 
 function Graphic({ productId }) {
   switch (productId) {
@@ -15,16 +16,20 @@ function Graphic({ productId }) {
   }
 }
 
-export default function ShirtPreview({ product, customization, selectedId, onSelect, onPointerDown, stageRef, showPrintGuide = false }) {
+export default function ShirtPreview({ product, customization, selectedId, onSelect, onPointerDown, stageRef, showPrintGuide = false, presentation = 'illustration' }) {
   const { color } = customization
   const elements = customization.elements || []
   const showCustom = elements.length > 0
   const colorHex = shirtColors[color] || shirtColors[product.colors[0]]
   const lightShirt = ['Blanco', 'Crema', 'Gris'].includes(color || product.colors[0])
+  const photo = presentation === 'photo' ? photoPreviewFor(product, color || product.colors[0]) : null
+  const printZone = photo?.printZone || PRINT_ZONE
 
   return (
     <div ref={stageRef} onPointerDown={onPointerDown} className="relative mx-auto w-full max-w-[600px] aspect-[600/650] select-none" style={{ containerType: 'inline-size', touchAction: onPointerDown ? 'none' : 'auto' }} role="img" aria-label={`Vista previa de ${product.name} en color ${color || product.colors[0]} con ${elements.length} elementos personalizados`}>
+      {photo && <img src={photo.image} alt="" draggable="false" className="absolute inset-0 h-full w-full object-contain" aria-hidden="true" />}
       <svg viewBox="0 0 600 650" className="h-full w-full" aria-hidden="true">
+        {!photo && <>
         <defs>
           <filter id="preview-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="8" dy="16" stdDeviation="13" floodColor="#202820" floodOpacity=".2" /></filter>
           <linearGradient id="preview-cloth" x2="1" y2="1"><stop stopColor="#fff" stopOpacity=".16" /><stop offset=".5" stopColor="#fff" stopOpacity="0" /><stop offset="1" stopColor="#000" stopOpacity=".15" /></linearGradient>
@@ -34,12 +39,13 @@ export default function ShirtPreview({ product, customization, selectedId, onSel
         <path d="M229 78q71 91 142 0l-25-13q-46 49-92 0z" fill={lightShirt ? '#d5d2c7' : '#19221f'} opacity=".75" />
         <path d="M251 68q49 47 98 0M172 235q18-21 22-69M428 235q-18-21-22-69M178 535q122 23 244 0" fill="none" stroke={lightShirt ? '#bbb9b0' : '#85918a'} strokeOpacity=".35" strokeWidth="3" />
         {!showCustom && <Graphic productId={product.id} />}
-        {showPrintGuide && <polygon points={PRINT_ZONE.map(({ x, y }) => `${x},${y}`).join(' ')} fill="none" stroke={lightShirt ? '#435b35' : '#d8f28a'} strokeOpacity=".55" strokeWidth="1.5" strokeDasharray="5 5" vectorEffect="non-scaling-stroke" pointerEvents="none" aria-hidden="true" />}
+        </>}
+        {showPrintGuide && <polygon points={printZone.map(({ x, y }) => `${x},${y}`).join(' ')} fill="none" stroke={photo ? '#d8f28a' : lightShirt ? '#435b35' : '#d8f28a'} strokeOpacity=".85" strokeWidth="1.5" strokeDasharray="5 5" vectorEffect="non-scaling-stroke" pointerEvents="none" aria-hidden="true" />}
       </svg>
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {elements.map((element) => {
           const selected = selectedId === element.id
-          const outside = isOutsidePrint(element)
+          const outside = isOutsidePrint(element, printZone)
           return <div key={element.id} data-element-id={element.id} onClick={() => onSelect?.(element.id)} className={`absolute flex items-center justify-center pointer-events-auto ${onPointerDown ? 'cursor-grab active:cursor-grabbing' : 'pointer-events-none'} ${selected ? `outline outline-2 ${outside ? 'outline-red-500' : 'outline-[#64842d]'}` : ''}`}
             style={{ left: `${element.x / DESIGN_WIDTH * 100}%`, top: `${element.y / DESIGN_HEIGHT * 100}%`, width: `${element.width / DESIGN_WIDTH * 100}%`, height: `${element.height / DESIGN_HEIGHT * 100}%`, transform: `translate(-50%, -50%) rotate(${element.rotation}deg)` }}>
             {element.type === 'image' ? <img src={element.content} alt="" draggable="false" className="pointer-events-none h-full w-full object-contain" /> : <span className="pointer-events-none flex h-full w-full items-center justify-center text-center font-bold leading-tight [overflow-wrap:anywhere]" style={{ color: element.color, fontFamily: element.font, fontSize: `${Math.max(1, element.height * 0.45) / DESIGN_WIDTH * 100}cqw`, textShadow: '0 1px 2px #0003' }}>{element.content}</span>}

@@ -3,8 +3,18 @@ import assert from 'node:assert/strict'
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { createServer } from 'vite'
+import { readFileSync } from 'node:fs'
 import { products } from '../src/data/products.js'
 import { colorChoice, createImage, createText, defaultCustomization, printColors, shirtColors } from '../src/data/customization.js'
+
+test('el salto al contenido no sustituye la ruta hash de GitHub Pages', () => {
+  const header = readFileSync(new URL('../src/components/Header.jsx', import.meta.url), 'utf8')
+  const layout = readFileSync(new URL('../src/components/Layout.jsx', import.meta.url), 'utf8')
+  assert.match(header, /main\?\.focus\(\); main\?\.scrollIntoView\(\)/)
+  assert.match(header, /Ir al contenido<\/button>/)
+  assert.doesNotMatch(header, /href="#contenido"/)
+  assert.match(layout, /<main id="contenido" tabIndex={-1}/)
+})
 
 test('los selectores muestran colores por nombre y por hex sin exigir una etiqueta', async () => {
   const vite = await createServer({ server: { middlewareMode: true, hmr: false }, appType: 'custom' })

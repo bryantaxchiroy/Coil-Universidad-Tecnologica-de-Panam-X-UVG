@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { ArrowUpRight, Search, SlidersHorizontal, X } from 'lucide-react'
 import ProductCard from '../components/ProductCard.jsx'
-import { categories, colors, filterProducts, products, sizes } from '../data/products.js'
+import { filterProducts } from '../data/products.js'
+import { publicProducts } from '../data/productStorage.js'
+import useProducts from '../hooks/useProducts.js'
 
 const initialFilters = { search: '', category: '', size: '', color: '' }
 
@@ -18,6 +20,11 @@ function FilterSelect({ label, value, options, onChange }) {
 }
 
 export default function Catalog() {
+  const { products: allProducts, error } = useProducts()
+  const products = publicProducts(allProducts)
+  const categories = [...new Set(products.map((product) => product.category))]
+  const sizes = [...new Set(products.flatMap((product) => product.sizes))]
+  const colors = [...new Set(products.flatMap((product) => product.colors))]
   const [filters, setFilters] = useState(initialFilters)
   const visibleProducts = filterProducts(products, filters)
   const hasFilters = Object.values(filters).some(Boolean)
@@ -49,6 +56,7 @@ export default function Catalog() {
           {hasFilters && <button type="button" onClick={() => setFilters(initialFilters)} className="inline-flex items-center gap-1 font-bold text-ink hover:text-[#63832c]"><X size={15} /> Limpiar filtros</button>}
         </div>
       </div>
+      {error && <p role="alert" className="mb-6 rounded-xl bg-[#fce9e5] p-4 text-sm text-[#873c2e]">{error}</p>}
       {visibleProducts.length ? (
         <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-4 lg:gap-7">
           {visibleProducts.map((product) => <ProductCard key={product.id} product={product} />)}

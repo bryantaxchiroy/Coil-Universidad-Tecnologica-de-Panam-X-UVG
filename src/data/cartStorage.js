@@ -1,4 +1,6 @@
 // Each entry is an independent configuration; price is its unit price including customization.
+import { getInventory, validateStock } from './inventoryStorage.js'
+import { getProducts } from './productStorage.js'
 export const CART_STORAGE_KEY = 'trama-cart'
 export const DEFAULT_CART_QUANTITY = 1
 export const MAX_CART_QUANTITY = 99
@@ -65,14 +67,18 @@ export function saveCart(items, storage = window.localStorage) {
 
 export function addCartItem(item, storage = window.localStorage) {
   validateCartQuantity(item.quantity)
-  return saveCart([...getCart(storage), item], storage)
+  const items = [...getCart(storage), item]
+  validateStock(items, getInventory(storage), getProducts(storage))
+  return saveCart(items, storage)
 }
 
 export function changeCartQuantity(id, quantity, storage = window.localStorage) {
   validateCartQuantity(quantity)
   const items = getCart(storage)
   if (!items.some((item) => item.id === id)) throw new Error('El artículo ya no está en el carrito.')
-  return saveCart(items.map((item) => item.id === id ? { ...item, quantity } : item), storage)
+  const updated = items.map((item) => item.id === id ? { ...item, quantity } : item)
+  validateStock(updated, getInventory(storage), getProducts(storage))
+  return saveCart(updated, storage)
 }
 
 export function removeCartItem(id, storage = window.localStorage) {

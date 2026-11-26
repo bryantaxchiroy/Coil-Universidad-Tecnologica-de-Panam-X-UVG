@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import OrderDetails from '../components/OrderDetails.jsx'
-import { findOrder } from '../data/orderStorage.js'
+import { findOrder, subscribeOrders } from '../data/orderStorage.js'
 
 function lookup(id) {
   if (!id) return { order: null, error: '' }
@@ -14,6 +14,8 @@ export default function Tracking() {
   const [searchParams, setSearchParams] = useSearchParams()
   const searchId = searchParams.get('pedido')?.trim() || ''
   const [input, setInput] = useState(searchId)
+  const [, setRevision] = useState(0)
+  useEffect(() => subscribeOrders(() => setRevision((current) => current + 1)), [])
   const { order, error } = lookup(searchId)
   const submit = (event) => { event.preventDefault(); setSearchParams(input.trim() ? { pedido: input.trim() } : {}) }
 

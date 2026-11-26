@@ -3,6 +3,7 @@ export const shirtColors = {
   Blanco: '#f8f7f2',
   'Verde oliva': '#677456',
   Crema: '#eee6d6',
+  Beige: '#d9c5aa',
   'Azul marino': '#253e52',
   Gris: '#929995',
   Terracota: '#bb7259',
@@ -103,7 +104,7 @@ export function resizeElement(element, width, height, lockAspect = element.lockA
   return { width: safeWidth, height: element.type === 'image' && lockAspect ? safeWidth * element.height / element.width : safeHeight }
 }
 
-export function isOutsidePrint(element) {
+export function isOutsidePrint(element, zone = PRINT_ZONE) {
   const { x, y, width, height, rotation } = element
   if (![x, y, width, height, rotation].every(Number.isFinite) || width <= 0 || height <= 0) return true
   const angle = rotation * Math.PI / 180
@@ -115,9 +116,9 @@ export function isOutsidePrint(element) {
     for (const dy of [-height / 2, height / 2]) {
       const cornerX = x + dx * cosine - dy * sine
       const cornerY = y + dx * sine + dy * cosine
-      for (let i = 0; i < PRINT_ZONE.length; i++) {
-        const a = PRINT_ZONE[i]
-        const b = PRINT_ZONE[(i + 1) % PRINT_ZONE.length]
+      for (let i = 0; i < zone.length; i++) {
+        const a = zone[i]
+        const b = zone[(i + 1) % zone.length]
         if ((b.x - a.x) * (cornerY - a.y) - (b.y - a.y) * (cornerX - a.x) < -1e-7) return true
       }
     }

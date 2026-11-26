@@ -7,18 +7,8 @@ import Cart from '../pages/Cart.jsx'
 import Checkout from '../pages/Checkout.jsx'
 import OrderConfirmation from '../pages/OrderConfirmation.jsx'
 import Tracking from '../pages/Tracking.jsx'
-import Placeholder from '../pages/Placeholder.jsx'
+import Administration from '../pages/Administration.jsx'
 import NotFound from '../pages/NotFound.jsx'
-
-const upcomingPages = [
-  {
-    path: 'administracion',
-    eyebrow: 'Administración',
-    title: 'Todo bajo control.',
-    description: 'Este espacio reunirá las herramientas para administrar productos y pedidos de la tienda.',
-    next: 'El panel administrativo se desarrollará en una siguiente etapa.',
-  },
-]
 
 export default function AppRoutes() {
   return (
@@ -31,9 +21,7 @@ export default function AppRoutes() {
         <Route path="checkout" element={<Checkout />} />
         <Route path="pedido/:id" element={<OrderConfirmation />} />
         <Route path="seguimiento" element={<Tracking />} />
-        {upcomingPages.map(({ path, ...content }) => (
-          <Route key={path} path={path} element={<Placeholder {...content} />} />
-        ))}
+        <Route path="administracion" element={<Administration />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

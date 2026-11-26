@@ -67,6 +67,18 @@ test('validaciones de checkout y error de cuota conservan el carrito sin crear u
   assert.throws(() => createOrder(details, memoryStorage()), /carrito está vacío/)
 })
 
+test('checkout rechaza un carrito cambiado en otra pestaña sin crear pedido ni descontar inventario', () => {
+  const storage = memoryStorage()
+  addCartItem(item('a'), storage)
+  const displayed = getCart(storage)
+  changeCartQuantity('a', 2, storage)
+  assert.throws(() => createOrder(details, storage, { expectedItems: displayed }), /carrito cambió/)
+  assert.deepEqual(getOrders(storage), [])
+  assert.equal(getCart(storage)[0].quantity, 2)
+  assert.equal(storage.getItem('trama-inventory'), null)
+  assert.equal(storage.getItem('trama-inventory-pending'), null)
+})
+
 test('si falla el vaciado después de guardar, se informa el pedido ya creado', () => {
   const storage = memoryStorage()
   addCartItem(item('a'), storage)

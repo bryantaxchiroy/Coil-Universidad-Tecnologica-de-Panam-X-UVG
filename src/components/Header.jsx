@@ -22,7 +22,7 @@ export default function Header() {
 
   return (
     <header className="relative z-20 border-b border-ink/8 bg-paper">
-      <a href="#contenido" className="sr-only rounded bg-ink px-4 py-2 text-white focus:not-sr-only focus:absolute focus:left-4 focus:top-3">Ir al contenido</a>
+      <button type="button" onClick={() => { const main = document.getElementById('contenido'); main?.focus(); main?.scrollIntoView() }} className="sr-only rounded bg-ink px-4 py-2 text-white focus:not-sr-only focus:absolute focus:left-4 focus:top-3">Ir al contenido</button>
       <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-6 px-5 sm:px-8 lg:px-10">
         <Link to="/" aria-label="Trama, ir a inicio" className="flex shrink-0 items-center gap-2.5">
           <span className="flex h-9 w-9 items-center justify-center rounded-[11px] bg-ink text-lime"><span className="brand-mark">t.</span></span>

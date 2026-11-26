@@ -21,7 +21,7 @@ export default function Footer() {
               <span className="font-bold text-white">Tu cuenta</span>
               <Link to="/seguimiento" className="text-white/60 hover:text-lime">Mis pedidos</Link>
               <Link to="/checkout" className="text-white/60 hover:text-lime">Checkout</Link>
-              <Link to="/administracion" className="inline-flex items-center gap-1 text-white/60 hover:text-lime">Administración <ArrowUpRight size={14} /></Link>
+              <Link to="/administracion" className="inline-flex items-center gap-1 text-white/60 hover:text-lime">Administración — Modo demostración <ArrowUpRight size={14} /></Link>
             </div>
           </div>
         </div>
